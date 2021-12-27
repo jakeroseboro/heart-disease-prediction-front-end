@@ -7,6 +7,7 @@ export const Cards = () => {
         <div className='d-flex cards justify-content-center'>
             <Card title="Welcome" bordered={false} style={{border: '1px solid rgb(187, 40, 40)'}}>
                 <p>Did you know heart disease is the leading cause of death in the U.S?</p>
+                <p>The good news is that it's preventable and treatable</p>
                 <Button>Click here to learn more</Button>
             </Card>
             

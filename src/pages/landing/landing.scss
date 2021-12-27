@@ -1,0 +1,12 @@
+@import '../../style/_variables';
+
+.landing{
+    background-image: url('../../assets/heart.png');
+    background-repeat: no-repeat;
+    height: 900px;
+    background-position: 150px;
+    @media (max-width:$smallScreen) {
+        height: 700px;
+        background-position: -560px;
+    }
+}
