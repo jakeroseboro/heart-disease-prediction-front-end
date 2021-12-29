@@ -1,16 +1,18 @@
 import { Menu } from 'antd';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
 
 
 export const Nav = () => {
     const navigate = useNavigate()
+    const location = useLocation()
     const clickHandler = (e:any) =>{
         navigate(e.key)
     }
 
     return(
     <div style={{width: '100%'}}>
-    <Menu mode="horizontal" defaultSelectedKeys={['/']} onClick={clickHandler}> 
+    <Menu mode="horizontal" selectedKeys={[location.pathname]} onClick={clickHandler}> 
     <Menu.Item key="/">
         Home
     </Menu.Item>
