@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,9 +8,9 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { Select } from 'antd';
+import { Select } from "antd";
 import { useEffect, useState } from "react";
-import { useChartData} from '../factsData'
+import { useChartData } from "../factsData";
 import { Container } from "react-bootstrap";
 
 ChartJS.register(
@@ -26,26 +25,25 @@ ChartJS.register(
 const { Option } = Select;
 
 export const FactChart = () => {
-  const {data: data, isLoading, refetch} = useChartData()
-  const [selected, setSelected] = useState('sex');
+  const { data: values, isLoading, refetch } = useChartData();
+  const [selected, setSelected] = useState("sex");
   const [chartData, setChartData] = useState([[0], [0]]);
-  const [labels, setLabels] = useState([""])
+  const [labels, setLabels] = useState([""]);
   const [options, setOptions] = useState(Object);
   const [chart, setChart] = useState({
     labels: labels,
-    datasets:[
+    datasets: [
       {
-        label: 'Heart Disease',
+        label: "Heart Disease",
         data: chartData[1],
-        backgroundColor: 'rgb(187, 40, 40)',
-
+        backgroundColor: "rgb(187, 40, 40)",
       },
       {
-        label: 'No Heart Disease',
+        label: "No Heart Disease",
         data: chartData[2],
-        backgroundColor: 'rgb(40, 121, 187)',
+        backgroundColor: "rgb(40, 121, 187)",
       },
-    ]
+    ],
   });
   const agePositive: number[] = [];
   const ageNegative: number[] = [];
@@ -78,124 +76,127 @@ export const FactChart = () => {
   const stSlopeNegative: number[] = [];
 
   useEffect(() => {
-      if(data)
-      {for (let i of data?.age[0]) {
+    if (values) {
+      for (let i of values?.age[0]) {
         agePositive.push(i);
       }
-      for (let i of data?.age[1]) {
+      for (let i of values?.age[1]) {
         ageNegative.push(i);
       }
-      for (let i of data?.chest_pain_type[0]) {
+      for (let i of values?.chest_pain_type[0]) {
         chestPainTypePositive.push(i);
       }
-      for (let i of data?.chest_pain_type[1]) {
+      for (let i of values?.chest_pain_type[1]) {
         chestPainTypeNegative.push(i);
       }
-      for (let i of data?.exercise_angina[0]) {
+      for (let i of values?.exercise_angina[0]) {
         exerciseAnginaPositive.push(i);
       }
-      for (let i of data?.exercise_angina[1]) {
+      for (let i of values?.exercise_angina[1]) {
         exerciseAnginaNegative.push(i);
       }
-      for (let i of data?.fasting_bs[0]) {
+      for (let i of values?.fasting_bs[0]) {
         fastingBsPositive.push(i);
       }
-      for (let i of data?.fasting_bs[1]) {
+      for (let i of values?.fasting_bs[1]) {
         fastingBsNegative.push(i);
       }
-      for (let i of data?.max_hr[0]) {
+      for (let i of values?.max_hr[0]) {
         maxHrPositive.push(i);
       }
-      for (let i of data?.max_hr[1]) {
+      for (let i of values?.max_hr[1]) {
         maxHrNegative.push(i);
       }
-      for (let i of data?.old_peak[0]) {
+      for (let i of values?.old_peak[0]) {
         oldPeakPositive.push(i);
       }
-      for (let i of data?.old_peak[1]) {
+      for (let i of values?.old_peak[1]) {
         oldPeakNegative.push(i);
       }
-      for (let i of data?.resting_bp[0]) {
+      for (let i of values?.resting_bp[0]) {
         restingBpPositive.push(i);
       }
-      for (let i of data?.resting_bp[1]) {
+      for (let i of values?.resting_bp[1]) {
         restingBpNegative.push(i);
       }
-      for (let i of data?.resting_ecg[0]) {
+      for (let i of values?.resting_ecg[0]) {
         restingEcgPositive.push(i);
       }
-      for (let i of data?.resting_ecg[1]) {
+      for (let i of values?.resting_ecg[1]) {
         restingEcgNegative.push(i);
       }
-      for (let i of data?.sex[0]) {
+      for (let i of values?.sex[0]) {
         sexPositive.push(i);
       }
-      for (let i of data?.sex[1]) {
+      for (let i of values?.sex[1]) {
         sexNegative.push(i);
       }
-      for (let i of data?.st_slope[0]) {
+      for (let i of values?.st_slope[0]) {
         stSlopePositive.push(i);
       }
-      for (let i of data?.st_slope[1]) {
+      for (let i of values?.st_slope[1]) {
         stSlopeNegative.push(i);
-      }}
-      });
+      }
+    }
+  });
 
-  const handleChange = (value: any) =>{
-    setSelected(value)
-    if(selected === "sex"){
+  const handleChange = (value: any) => {
+    setSelected(value);
+    if (selected === "sex") {
       setChartData([sexPositive, sexNegative]);
-      setLabels(["Male", "Female"])
+      setLabels(["Male", "Female"]);
       setOptions({
         responsive: true,
         plugins: {
           legend: {
-            position: 'top' as const,
+            position: "top" as const,
           },
           title: {
             display: true,
-            text: 'Sex Data',
+            text: "Sex Data",
           },
         },
-      })
+      });
     }
-    setChart( {
+    setChart({
       labels: labels,
-      datasets:[
+      datasets: [
         {
-          label: 'Heart Disease',
+          label: "Heart Disease",
           data: chartData[0],
-          backgroundColor: 'rgb(187, 40, 40)',
-
+          backgroundColor: "rgb(187, 40, 40)",
         },
         {
-          label: 'No Heart Disease',
+          label: "No Heart Disease",
           data: chartData[1],
-          backgroundColor: 'rgb(40, 121, 187)',
+          backgroundColor: "rgb(40, 121, 187)",
         },
       ],
-    }
-    );
-  }
+    });
+  };
   return (
     <Container className="jumbotron">
       <div className="d-flex justify-content-center">
-    <Select defaultValue="sex" style={{ width: 360 }} onChange={handleChange}>
-      <Option value={"age"}>Age</Option>
-      <Option value={"sex"}>Sex</Option>
-      <Option value={"chestPainType"}>Chest Pain Type</Option>
-      <Option value={"angina"}>Exercise Angina</Option>
-      <Option value={"bs"}>Fasting Blood Sugar</Option>
-      <Option value={"hr"}>Max Heart Rate</Option>
-      <Option value={"peak"}>Old Peak(ST)</Option>
-      <Option value={"bp"}>Resting Blood Pressure</Option>
-      <Option value={"ecg"}>Resting Electrocardiogram Results</Option>
-      <Option value={"stSlope"}>ST Slope</Option>
-    </Select>
-    </div>
-    <div className="d-flex justify-content-center">
-      <Bar options={options} data={chart} defaultValue={undefined}/>
-    </div>
+        <Select
+          defaultValue="sex"
+          style={{ width: 360 }}
+          onChange={handleChange}
+        >
+          <Option value={"age"}>Age</Option>
+          <Option value={"sex"}>Sex</Option>
+          <Option value={"chestPainType"}>Chest Pain Type</Option>
+          <Option value={"angina"}>Exercise Angina</Option>
+          <Option value={"bs"}>Fasting Blood Sugar</Option>
+          <Option value={"hr"}>Max Heart Rate</Option>
+          <Option value={"peak"}>Old Peak(ST)</Option>
+          <Option value={"bp"}>Resting Blood Pressure</Option>
+          <Option value={"ecg"}>Resting Electrocardiogram Results</Option>
+          <Option value={"stSlope"}>ST Slope</Option>
+        </Select>
+      </div>
+      <div className="d-flex justify-content-center">
+        <Bar options={options} data={chart} defaultValue={undefined} />
+      </div>
     </Container>
   );
 };
