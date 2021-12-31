@@ -26,25 +26,22 @@ const { Option } = Select;
 
 export const FactChart = () => {
   const { data: values, isLoading, refetch } = useChartData();
-  const [selected, setSelected] = useState("sex");
-  const [chartData, setChartData] = useState([[0], [0]]);
-  const [labels, setLabels] = useState([""]);
-  const [options, setOptions] = useState(Object);
-  const [chart, setChart] = useState({
-    labels: labels,
+  const [chartData, setChartData] = useState(
+    {
+    labels: ["", ""],
     datasets: [
       {
         label: "Heart Disease",
-        data: chartData[1],
+        data: [0],
         backgroundColor: "rgb(187, 40, 40)",
       },
       {
         label: "No Heart Disease",
-        data: chartData[2],
+        data: [0],
         backgroundColor: "rgb(40, 121, 187)",
       },
     ],
-  });
+  })
   const agePositive: number[] = [];
   const ageNegative: number[] = [];
 
@@ -76,109 +73,141 @@ export const FactChart = () => {
   const stSlopeNegative: number[] = [];
 
   useEffect(() => {
+    fillLists();
+  },[]);
+
+
+  const fillLists = async () => {
+    await refetch()
     if (values) {
-      for (let i of values?.age[0]) {
+      for (let i of values.age[0]) {
         agePositive.push(i);
       }
-      for (let i of values?.age[1]) {
+      for (let i of values.age[1]) {
         ageNegative.push(i);
       }
-      for (let i of values?.chest_pain_type[0]) {
+      for (let i of values.chest_pain_type[0]) {
         chestPainTypePositive.push(i);
       }
-      for (let i of values?.chest_pain_type[1]) {
+      for (let i of values.chest_pain_type[1]) {
         chestPainTypeNegative.push(i);
       }
-      for (let i of values?.exercise_angina[0]) {
+      for (let i of values.exercise_angina[0]) {
         exerciseAnginaPositive.push(i);
       }
-      for (let i of values?.exercise_angina[1]) {
+      for (let i of values.exercise_angina[1]) {
         exerciseAnginaNegative.push(i);
       }
-      for (let i of values?.fasting_bs[0]) {
+      for (let i of values.fasting_bs[0]) {
         fastingBsPositive.push(i);
       }
-      for (let i of values?.fasting_bs[1]) {
+      for (let i of values.fasting_bs[1]) {
         fastingBsNegative.push(i);
       }
-      for (let i of values?.max_hr[0]) {
+      for (let i of values.max_hr[0]) {
         maxHrPositive.push(i);
       }
-      for (let i of values?.max_hr[1]) {
+      for (let i of values.max_hr[1]) {
         maxHrNegative.push(i);
       }
-      for (let i of values?.old_peak[0]) {
+      for (let i of values.old_peak[0]) {
         oldPeakPositive.push(i);
       }
-      for (let i of values?.old_peak[1]) {
+      for (let i of values.old_peak[1]) {
         oldPeakNegative.push(i);
       }
-      for (let i of values?.resting_bp[0]) {
+      for (let i of values.resting_bp[0]) {
         restingBpPositive.push(i);
       }
-      for (let i of values?.resting_bp[1]) {
+      for (let i of values.resting_bp[1]) {
         restingBpNegative.push(i);
       }
-      for (let i of values?.resting_ecg[0]) {
+      for (let i of values.resting_ecg[0]) {
         restingEcgPositive.push(i);
       }
-      for (let i of values?.resting_ecg[1]) {
+      for (let i of values.resting_ecg[1]) {
         restingEcgNegative.push(i);
       }
-      for (let i of values?.sex[0]) {
+      for (let i of values.sex[0]) {
         sexPositive.push(i);
       }
-      for (let i of values?.sex[1]) {
+      for (let i of values.sex[1]) {
         sexNegative.push(i);
       }
-      for (let i of values?.st_slope[0]) {
+      for (let i of values.st_slope[0]) {
         stSlopePositive.push(i);
       }
-      for (let i of values?.st_slope[1]) {
+      for (let i of values.st_slope[1]) {
         stSlopeNegative.push(i);
       }
     }
-  });
+  }
 
-  const handleChange = (value: any) => {
-    setSelected(value);
-    if (selected === "sex") {
-      setChartData([sexPositive, sexNegative]);
-      setLabels(["Male", "Female"]);
-      setOptions({
-        responsive: true,
-        plugins: {
-          legend: {
-            position: "top" as const,
-          },
-          title: {
-            display: true,
-            text: "Sex Data",
-          },
-        },
-      });
-    }
-    setChart({
-      labels: labels,
-      datasets: [
-        {
-          label: "Heart Disease",
-          data: chartData[0],
-          backgroundColor: "rgb(187, 40, 40)",
-        },
-        {
-          label: "No Heart Disease",
-          data: chartData[1],
-          backgroundColor: "rgb(40, 121, 187)",
-        },
-      ],
-    });
+  const handleChange = async(value?: any) => {
+    await fillLists()
+    setChart(value)
   };
+
+  const setOptions = () => {
+    return {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top" as const,
+        },
+        title: {
+          display: false,
+        },
+      },
+    }
+  }
+
+  const setChart = (value?:string) => {
+    if(!value){
+      value = "sex"
+    }
+    let chart:any = {};
+    if (value === "sex") {
+      chart = {
+        labels: ["Male", "Female"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: sexPositive,
+            backgroundColor: "rgb(187, 40, 40)",
+          },
+          {
+            label: "No Heart Disease",
+            data: sexNegative,
+            backgroundColor: "rgb(40, 121, 187)",
+          },
+        ],
+      }
+    }
+    if (value === "age") {
+      chart = {
+        labels: ["20-40", "40-60", "60-80"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: agePositive,
+            backgroundColor: "rgb(187, 40, 40)",
+          },
+          {
+            label: "No Heart Disease",
+            data: ageNegative,
+            backgroundColor: "rgb(40, 121, 187)",
+          },
+        ],
+      }
+    }
+    setChartData(chart)
+  }
+
   return (
     <Container className="jumbotron">
       <div className="d-flex justify-content-center">
         <Select
-          defaultValue="sex"
           style={{ width: 360 }}
           onChange={handleChange}
         >
@@ -195,7 +224,7 @@ export const FactChart = () => {
         </Select>
       </div>
       <div className="d-flex justify-content-center">
-        <Bar options={options} data={chart} defaultValue={undefined} />
+        <Bar options={setOptions()} data={chartData} defaultValue={undefined} />
       </div>
     </Container>
   );
