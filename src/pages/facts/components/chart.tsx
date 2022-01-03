@@ -201,6 +201,142 @@ export const FactChart = () => {
         ],
       }
     }
+    if (value === "chestPainType") {
+      chart = {
+        labels: ["ATA: Atypical Angina", "TA: Typical Angina", "NAP: Non-Anginal Pain", "ASY: Asymptomatic"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: chestPainTypePositive,
+            backgroundColor: "rgb(187, 40, 40)",
+          },
+          {
+            label: "No Heart Disease",
+            data: chestPainTypeNegative,
+            backgroundColor: "rgb(40, 121, 187)",
+          },
+        ],
+      }
+    }
+    if (value === "angina") {
+      chart = {
+        labels: ["Exercise Angina", "No Exercise Angina"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: exerciseAnginaPositive,
+            backgroundColor: "rgb(187, 40, 40)",
+          },
+          {
+            label: "No Heart Disease",
+            data: exerciseAnginaNegative,
+            backgroundColor: "rgb(40, 121, 187)",
+          },
+        ],
+      }
+    }
+    if (value === "bs") {
+      chart = {
+        labels: ["FastingBS > 120 mg/dl", "FastingBS < 120 mg/dl"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: fastingBsPositive,
+            backgroundColor: "rgb(187, 40, 40)",
+          },
+          {
+            label: "No Heart Disease",
+            data: fastingBsNegative,
+            backgroundColor: "rgb(40, 121, 187)",
+          },
+        ],
+      }
+    }
+    if (value === "hr") {
+      chart = {
+        labels: ["60-131", "131-202"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: maxHrPositive,
+            backgroundColor: "rgb(187, 40, 40)",
+          },
+          {
+            label: "No Heart Disease",
+            data: maxHrNegative,
+            backgroundColor: "rgb(40, 121, 187)",
+          },
+        ],
+      }
+    }
+    if (value === "peak") {
+      chart = {
+        labels: ["(-)7-1", "1-7"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: oldPeakPositive,
+            backgroundColor: "rgb(187, 40, 40)",
+          },
+          {
+            label: "No Heart Disease",
+            data: oldPeakNegative,
+            backgroundColor: "rgb(40, 121, 187)",
+          },
+        ],
+      }
+    }
+    if (value === "bp") {
+      chart = {
+        labels: ["Resting BP < 120 mm Hg", "Resting BP > 120 mm Hg"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: restingBpPositive,
+            backgroundColor: "rgb(187, 40, 40)",
+          },
+          {
+            label: "No Heart Disease",
+            data: restingBpNegative,
+            backgroundColor: "rgb(40, 121, 187)",
+          },
+        ],
+      }
+    }
+    if (value === "ecg") {
+      chart = {
+        labels: ["Normal: Normal", "ST: Having ST-T wave abnormality", "LVH: Probable or definite left ventricular hypertrophy by Estes' criteria"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: restingEcgPositive,
+            backgroundColor: "rgb(187, 40, 40)",
+          },
+          {
+            label: "No Heart Disease",
+            data: restingEcgNegative,
+            backgroundColor: "rgb(40, 121, 187)",
+          },
+        ],
+      }
+    }
+    if (value === "stSlope") {
+      chart = {
+        labels: ["Up-Sloping","Flat", "Down-Sloping"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: stSlopePositive,
+            backgroundColor: "rgb(187, 40, 40)",
+          },
+          {
+            label: "No Heart Disease",
+            data: stSlopeNegative,
+            backgroundColor: "rgb(40, 121, 187)",
+          },
+        ],
+      }
+    }
     setChartData(chart)
   }
 
