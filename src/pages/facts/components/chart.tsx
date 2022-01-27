@@ -6,27 +6,67 @@ import {
   Title,
   Tooltip,
   Legend,
+  PointElement,
+  LineElement,
+  ArcElement
 } from "chart.js";
-import { Bar } from "react-chartjs-2";
-import { Select } from "antd";
+import { Bar, Pie, Line } from "react-chartjs-2";
+import { Select, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { useChartData } from "../factsData";
 import { Container } from "react-bootstrap";
-
+import './chart.scss'
 ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  PointElement,
+  LineElement,
+  ArcElement
 );
 
 const { Option } = Select;
 
 export const FactChart = () => {
-  const { data: values, isLoading, refetch } = useChartData();
+  const { data: values, refetch } = useChartData();
+  const [loading, setIsLoading] = useState(false);
+  const [selected, setSelected] = useState('');
   const [chartData, setChartData] = useState(
+    {
+    labels: ["", ""],
+    datasets: [
+      {
+        label: "Heart Disease",
+        data: [0],
+        backgroundColor: "rgb(187, 40, 40)",
+      },
+      {
+        label: "No Heart Disease",
+        data: [0],
+        backgroundColor: "rgb(40, 121, 187)",
+      },
+    ],
+  })
+  const [pieChartData, setPieChartData] = useState(
+    {
+    labels: ["", ""],
+    datasets: [
+      {
+        label: "Heart Disease",
+        data: [0],
+        backgroundColor: "rgb(187, 40, 40)",
+      },
+      {
+        label: "No Heart Disease",
+        data: [0],
+        backgroundColor: "rgb(40, 121, 187)",
+      },
+    ],
+  })
+  const [pieChart2Data, setPieChart2Data] = useState(
     {
     labels: ["", ""],
     datasets: [
@@ -78,7 +118,7 @@ export const FactChart = () => {
 
 
   const fillLists = async () => {
-    await refetch()
+    setIsLoading(true)
     if (values) {
       for (let i of values.age[0]) {
         agePositive.push(i);
@@ -141,15 +181,23 @@ export const FactChart = () => {
         stSlopeNegative.push(i);
       }
     }
+    setIsLoading(false)
   }
 
   const handleChange = async(value?: any) => {
+    if(values === undefined){
+      await refetch()
+    }
+    setSelected(value)
     await fillLists()
     setChart(value)
+    setPieChart1(value)
+    setPieChart2(value)
   };
 
   const setOptions = () => {
     return {
+      maintainAspectRatio: false,
       responsive: true,
       plugins: {
         legend: {
@@ -162,7 +210,40 @@ export const FactChart = () => {
     }
   }
 
+  const setLineOptions = () => {
+    return {
+      responsive: true,
+      interaction: {
+        mode: 'index' as const,
+        intersect: false,
+      },
+      stacked: false,
+      plugins: {
+        title: {
+          display: true,
+          text: 'Chart.js Line Chart - Multi Axis',
+        },
+      },
+      scales: {
+        y: {
+          type: 'linear' as const,
+          display: true,
+          position: 'left' as const,
+        },
+        y1: {
+          type: 'linear' as const,
+          display: true,
+          position: 'right' as const,
+          grid: {
+            drawOnChartArea: false,
+          },
+        },
+      },
+    }
+  }
+
   const setChart = (value?:string) => {
+    setIsLoading(true);
     if(!value){
       value = "sex"
     }
@@ -174,12 +255,12 @@ export const FactChart = () => {
           {
             label: "Heart Disease",
             data: sexPositive,
-            backgroundColor: "rgb(187, 40, 40)",
+            backgroundColor: "rgb(187, 40, 40)"
           },
           {
             label: "No Heart Disease",
             data: sexNegative,
-            backgroundColor: "rgb(40, 121, 187)",
+            backgroundColor: "rgb(40, 121, 187)"
           },
         ],
       }
@@ -338,6 +419,295 @@ export const FactChart = () => {
       }
     }
     setChartData(chart)
+    setIsLoading(false)
+  }
+
+  const setPieChart1 = (value?:string) =>{
+    setIsLoading(true);
+    if(!value){
+      value = "sex"
+    }
+    let chart:any = {};
+    if (value === "sex") {
+      chart = {
+        labels: ["Male", "Female"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: sexPositive,
+            backgroundColor: ['rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)']
+          },
+        ],
+      }
+    }
+    if (value === "age") {
+      chart = {
+        labels: ["20-40", "40-60", "60-80"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: agePositive,
+            backgroundColor: ['rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)']
+          }
+        ],
+      }
+    }
+    if (value === "chestPainType") {
+      chart = {
+        labels: ["ATA: Atypical Angina", "TA: Typical Angina", "NAP: Non-Anginal Pain", "ASY: Asymptomatic"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: chestPainTypePositive,
+            backgroundColor: ['rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)',]
+          }
+        ],
+      }
+    }
+    if (value === "angina") {
+      chart = {
+        labels: ["Exercise Angina", "No Exercise Angina"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: exerciseAnginaPositive,
+            backgroundColor: ['rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)']
+          },
+        ],
+      }
+    }
+    if (value === "bs") {
+      chart = {
+        labels: ["FastingBS > 120 mg/dl", "FastingBS < 120 mg/dl"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: fastingBsPositive,
+            backgroundColor: ['rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)']
+          },
+        ],
+      }
+    }
+    if (value === "hr") {
+      chart = {
+        labels: ["60-131", "131-202"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: maxHrPositive,
+            backgroundColor: ['rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)']
+          },
+        ],
+      }
+    }
+    if (value === "peak") {
+      chart = {
+        labels: ["(-)7-1", "1-7"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: oldPeakPositive,
+            backgroundColor: ['rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)']
+          },
+        ],
+      }
+    }
+    if (value === "bp") {
+      chart = {
+        labels: ["Resting BP < 120 mm Hg", "Resting BP > 120 mm Hg"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: restingBpPositive,
+            backgroundColor: ['rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)']
+          },
+        ],
+      }
+    }
+    if (value === "ecg") {
+      chart = {
+        labels: ["Normal: Normal", "ST: Having ST-T wave abnormality", "LVH: Probable or definite left ventricular hypertrophy by Estes' criteria"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: restingEcgPositive,
+            backgroundColor: ['rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)',]
+          },
+        ],
+      }
+    }
+    if (value === "stSlope") {
+      chart = {
+        labels: ["Up-Sloping","Flat", "Down-Sloping"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: stSlopePositive,
+            backgroundColor: ['rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)']
+          },
+        ],
+      }
+    }
+    setPieChartData(chart)
+    setIsLoading(false)
+  }
+
+  const setPieChart2 = (value?:string) =>{
+    setIsLoading(true);
+    if(!value){
+      value = "sex"
+    }
+    let chart:any = {};
+    if (value === "sex") {
+      chart = {
+        labels: ["Male", "Female"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: sexNegative,
+            backgroundColor: ['rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)']
+          },
+        ],
+      }
+    }
+    if (value === "age") {
+      chart = {
+        labels: ["20-40", "40-60", "60-80"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: ageNegative,
+            backgroundColor: ['rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)']
+          }
+        ],
+      }
+    }
+    if (value === "chestPainType") {
+      chart = {
+        labels: ["ATA: Atypical Angina", "TA: Typical Angina", "NAP: Non-Anginal Pain", "ASY: Asymptomatic"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: chestPainTypeNegative,
+            backgroundColor: ['rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)',]
+          }
+        ],
+      }
+    }
+    if (value === "angina") {
+      chart = {
+        labels: ["Exercise Angina", "No Exercise Angina"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: exerciseAnginaNegative,
+            backgroundColor: ['rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)']
+          },
+        ],
+      }
+    }
+    if (value === "bs") {
+      chart = {
+        labels: ["FastingBS > 120 mg/dl", "FastingBS < 120 mg/dl"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: fastingBsNegative,
+            backgroundColor: ['rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)']
+          },
+        ],
+      }
+    }
+    if (value === "hr") {
+      chart = {
+        labels: ["60-131", "131-202"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: maxHrNegative,
+            backgroundColor: ['rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)']
+          },
+        ],
+      }
+    }
+    if (value === "peak") {
+      chart = {
+        labels: ["(-)7-1", "1-7"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: oldPeakNegative,
+            backgroundColor: ['rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)']
+          },
+        ],
+      }
+    }
+    if (value === "bp") {
+      chart = {
+        labels: ["Resting BP < 120 mm Hg", "Resting BP > 120 mm Hg"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: restingBpNegative,
+            backgroundColor: ['rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)']
+          },
+        ],
+      }
+    }
+    if (value === "ecg") {
+      chart = {
+        labels: ["Normal: Normal", "ST: Having ST-T wave abnormality", "LVH: Probable or definite left ventricular hypertrophy by Estes' criteria"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: restingEcgNegative,
+            backgroundColor: ['rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)',]
+          },
+        ],
+      }
+    }
+    if (value === "stSlope") {
+      chart = {
+        labels: ["Up-Sloping","Flat", "Down-Sloping"],
+        datasets: [
+          {
+            label: "Heart Disease",
+            data: stSlopeNegative,
+            backgroundColor: ['rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)']
+          },
+        ],
+      }
+    }
+    setPieChart2Data(chart)
+    setIsLoading(false)
   }
 
   return (
@@ -359,9 +729,28 @@ export const FactChart = () => {
           <Option value={"stSlope"}>ST Slope</Option>
         </Select>
       </div>
-      <div className="d-flex justify-content-center">
-        <Bar options={setOptions()} data={chartData} defaultValue={undefined} />
+      {selected === '' ? <div className="d-flex justify-content-center chart">Select an option from the dropdown to learn more</div> :
+      <div className="d-block justify-content-center">
+       <div className="d-flex justify-content-center row">
+         <div className="col">
+         <div className="chart"><Bar options={setOptions()} data={chartData} defaultValue={undefined} width={400} height={400}/></div>
+         </div>
+         <div className="col">
+         <div className="chart"><Line data={chartData} defaultValue={undefined} width={400} height={400}/></div>
+         </div>
       </div>
+      <div className="d-flex justify-content-center">
+      <div className="d-flex justify-content-center row">
+         <div className="col">
+         <div className="chart"><div>Positive:</div><div><Pie options={setOptions()} data={pieChartData} defaultValue={undefined} width={400} height={400}/></div></div>
+         </div>
+         <div className="col">
+         <div className="chart"><div>Negative:</div><div><Pie options={setOptions()} data={pieChart2Data} defaultValue={undefined} width={400} height={400}/></div></div>
+         </div>
+      </div>
+      </div>
+      </div>
+      }
     </Container>
   );
 };
