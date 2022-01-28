@@ -21,6 +21,7 @@ export const LoginForm = () => {
         else if(mode === "signUp"){
             await axios.post("https://heart-disease-ml-api.herokuapp.com/signup", user).then(r => localStorage.setItem('token', r.data.auth_token))
         }
+        window.location.reload()
     }
     return(
         <>

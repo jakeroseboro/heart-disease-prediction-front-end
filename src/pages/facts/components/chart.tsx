@@ -729,7 +729,7 @@ export const FactChart = () => {
           <Option value={"stSlope"}>ST Slope</Option>
         </Select>
       </div>
-      {selected === '' ? <div className="d-flex justify-content-center chart">Select an option from the dropdown to learn more</div> :
+      {selected === '' ? <div className="d-flex justify-content-center chart text-center"><h3>The data displayed is collected from a study conducted on 918 patients worldwide with varying heart conditions. <br/>Select an option from the dropdown to learn more</h3></div> :
       <div className="d-block justify-content-center">
        <div className="d-flex justify-content-center row">
          <div className="col">
