@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react';
 import { Landing } from './pages/landing/landing';
 import { Facts } from './pages/facts/facts';
-import { Login } from './pages/login/login'
+import { Login } from './pages/login/login';
+import { Quiz } from './pages/quiz/quiz';
 import { Nav } from './shared/nav';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'antd/dist/antd.css';
-import axios from 'axios';
 import { getChartData } from './pages/facts/factsData';
 
 export const App = () => {
   const getTest = getChartData()
   useEffect(() => {
-    getTest.then(r => {if(r.status !== 200){
-      localStorage.removeItem('token')
-    }} )
+    getTest.then(r => {if(r.status === 401){
+      localStorage.clear();
+    }})
   }, []);
   const userToken = localStorage.getItem('token');
 
@@ -26,9 +26,12 @@ export const App = () => {
         <>
          <Route path="/" element={<Landing/>}/>
          <Route path="/facts" element={<Facts/>}/> 
+         <Route path="/quiz" element={<Quiz/>}/> 
          </>:
          <>
          <Route path="/" element={<Login/>}/>
+         <Route path="/facts" element={<Login/>}/>
+         <Route path="/quiz" element={<Login/>}/>
          </>
          }
       </Routes>

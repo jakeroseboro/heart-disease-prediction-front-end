@@ -11,7 +11,7 @@ import {
   ArcElement
 } from "chart.js";
 import { Bar, Pie, Line } from "react-chartjs-2";
-import { Select, Spin } from "antd";
+import { Select } from "antd";
 import { useEffect, useState } from "react";
 import { useChartData } from "../factsData";
 import { Container } from "react-bootstrap";

@@ -29,7 +29,7 @@ export const LoginForm = () => {
         <div className='d-flex cards justify-content-center'>
             <Card title="Login" bordered={false} style={{border: '1px solid rgb(187, 40, 40)'}}>
                 <Form
-                name="basic"
+                name="Login"
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
                 onFinish={onFinish}
