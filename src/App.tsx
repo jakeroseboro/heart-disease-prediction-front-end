@@ -11,10 +11,19 @@ import { getChartData } from './pages/facts/factsData';
 
 export const App = () => {
   const getTest = getChartData()
+  const checkIfLoggedIn = async() =>{
+    try{
+      const results = await getTest;
+      if(results.status !== 200){
+        localStorage.removeItem('token')
+      }
+    }
+    catch(Error){
+      localStorage.removeItem('token')
+    }
+  }
   useEffect(() => {
-    getTest.then(r => {if(r.status === 401){
-      localStorage.clear();
-    }})
+    checkIfLoggedIn()
   }, []);
   const userToken = localStorage.getItem('token');
 
