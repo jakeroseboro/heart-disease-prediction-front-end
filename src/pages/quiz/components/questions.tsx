@@ -7,6 +7,7 @@ export const Questions = () =>{
     const [quizNumber, setQuizNumber] = useState(0);
 
     const onFinish = (values:any) =>{
+        console.log("Do i work")
         console.log(values)
     }
 
@@ -73,7 +74,7 @@ export const Questions = () =>{
                     <Input/>
                 </Form.Item>
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" style={{margin: 15}}>Submit</Button>
+                    <Button  hidden={quizNumber !== 10} type="primary" htmlType="submit" style={{margin: 15}}>Submit</Button>
                     <Button hidden={quizNumber === 10} onClick={() => setQuizNumber(quizNumber + 1)}>Next</Button>
                 </Form.Item>
             </Form>

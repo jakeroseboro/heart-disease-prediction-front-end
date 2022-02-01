@@ -9,4 +9,13 @@ export const getChartData = async()=>{
 
 export const useChartData =() => 
 useQuery('chartData', () =>
-getChartData().then(r => {return r.data}))
+getChartData().then(r => {
+    if(r.status === 401){
+        getChartData().then(r => {
+            if(r.status === 401){
+                localStorage.removeItem('token')
+            }
+        })
+    }
+    return r.data
+}));

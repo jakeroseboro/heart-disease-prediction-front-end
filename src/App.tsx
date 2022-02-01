@@ -7,24 +7,8 @@ import { Nav } from './shared/nav';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'antd/dist/antd.css';
-import { getChartData } from './pages/facts/factsData';
 
 export const App = () => {
-  const getTest = getChartData()
-  const checkIfLoggedIn = async() =>{
-    try{
-      const results = await getTest;
-      if(results.status !== 200){
-        localStorage.removeItem('token')
-      }
-    }
-    catch(Error){
-      localStorage.removeItem('token')
-    }
-  }
-  useEffect(() => {
-    checkIfLoggedIn()
-  }, []);
   const userToken = localStorage.getItem('token');
 
   return(
