@@ -28,6 +28,8 @@ ChartJS.register(
   ArcElement
 );
 
+ChartJS.defaults.color = "black"
+
 const { Option } = Select;
 
 export const FactChart = () => {
@@ -712,7 +714,7 @@ export const FactChart = () => {
 
   return (
     <Container className="jumbotron">
-      <div className="d-flex justify-content-center">
+      <div className="d-flex justify-content-center options">
         <Select
           style={{ width: 360 }}
           onChange={handleChange}
@@ -729,8 +731,8 @@ export const FactChart = () => {
           <Option value={"stSlope"}>ST Slope</Option>
         </Select>
       </div>
-      {selected === '' ? <div className="d-flex justify-content-center chart text-center"><h3>The data displayed is collected from a study conducted on 918 patients worldwide with varying heart conditions. <br/>Select an option from the dropdown to learn more</h3></div> :
-      <div className="d-block justify-content-center">
+      {selected === '' ? <div className="d-flex justify-content-center chart text-center"><h1 className="text-white">The data displayed is collected from a study conducted on 918 patients worldwide with varying heart conditions. <br/>Select an option from the dropdown to learn more</h1></div> :
+      <div className="d-block justify-content-center facts-page">
        <div className="d-flex justify-content-center row">
          <div className="col">
          <div className="chart"><Bar options={setOptions()} data={chartData} defaultValue={undefined} width={400} height={400}/></div>
@@ -742,10 +744,10 @@ export const FactChart = () => {
       <div className="d-flex justify-content-center">
       <div className="d-flex justify-content-center row">
          <div className="col">
-         <div className="chart"><div>Positive:</div><div><Pie options={setOptions()} data={pieChartData} defaultValue={undefined} width={400} height={400}/></div></div>
+         <div className="chart"><div className="text-center">Positive:</div><div><Pie options={setOptions()} data={pieChartData} defaultValue={undefined} width={400} height={400}/></div></div>
          </div>
          <div className="col">
-         <div className="chart"><div>Negative:</div><div><Pie options={setOptions()} data={pieChart2Data} defaultValue={undefined} width={400} height={400}/></div></div>
+         <div className="chart"><div className="text-center">Negative:</div><div><Pie options={setOptions()} data={pieChart2Data} defaultValue={undefined} width={400} height={400}/></div></div>
          </div>
       </div>
       </div>
