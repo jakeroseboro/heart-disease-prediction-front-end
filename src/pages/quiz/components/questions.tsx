@@ -89,7 +89,7 @@ export const Questions = () =>{
         {quizMode === 0 ? 
         <>
         <div className='d-flex justify-content-center text-center quiz'>
-        <Card bordered={false} style={{backgroundColor: "#fdbb2d;", width:"30%"}}>
+        <Card bordered={false} className='quiz-card'>
                     <p>{questions[quizNumber]}</p>
                     <Form name='Quiz' onFinish={onFinish} initialValues={initialValues}>
                         <Form.Item hidden={quizNumber !== 0} label="Age" name="Age" rules={[{ required: true }]}>
