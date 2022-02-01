@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Landing } from './pages/landing/landing';
 import { Facts } from './pages/facts/facts';
 import { Login } from './pages/login/login';

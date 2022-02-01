@@ -34,7 +34,6 @@ const { Option } = Select;
 
 export const FactChart = () => {
   const { data: values, refetch } = useChartData();
-  const [loading, setIsLoading] = useState(false);
   const [selected, setSelected] = useState('');
   const [chartData, setChartData] = useState(
     {
@@ -116,11 +115,11 @@ export const FactChart = () => {
 
   useEffect(() => {
     fillLists();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
 
   const fillLists = async () => {
-    setIsLoading(true)
     if (values) {
       for (let i of values.age[0]) {
         agePositive.push(i);
@@ -183,7 +182,6 @@ export const FactChart = () => {
         stSlopeNegative.push(i);
       }
     }
-    setIsLoading(false)
   }
 
   const handleChange = async(value?: any) => {
@@ -212,40 +210,7 @@ export const FactChart = () => {
     }
   }
 
-  const setLineOptions = () => {
-    return {
-      responsive: true,
-      interaction: {
-        mode: 'index' as const,
-        intersect: false,
-      },
-      stacked: false,
-      plugins: {
-        title: {
-          display: true,
-          text: 'Chart.js Line Chart - Multi Axis',
-        },
-      },
-      scales: {
-        y: {
-          type: 'linear' as const,
-          display: true,
-          position: 'left' as const,
-        },
-        y1: {
-          type: 'linear' as const,
-          display: true,
-          position: 'right' as const,
-          grid: {
-            drawOnChartArea: false,
-          },
-        },
-      },
-    }
-  }
-
   const setChart = (value?:string) => {
-    setIsLoading(true);
     if(!value){
       value = "sex"
     }
@@ -421,11 +386,9 @@ export const FactChart = () => {
       }
     }
     setChartData(chart)
-    setIsLoading(false)
   }
 
   const setPieChart1 = (value?:string) =>{
-    setIsLoading(true);
     if(!value){
       value = "sex"
     }
@@ -565,11 +528,9 @@ export const FactChart = () => {
       }
     }
     setPieChartData(chart)
-    setIsLoading(false)
   }
 
   const setPieChart2 = (value?:string) =>{
-    setIsLoading(true);
     if(!value){
       value = "sex"
     }
@@ -709,7 +670,6 @@ export const FactChart = () => {
       }
     }
     setPieChart2Data(chart)
-    setIsLoading(false)
   }
 
   return (
