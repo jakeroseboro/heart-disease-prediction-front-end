@@ -118,6 +118,15 @@ export const FactChart = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
+  const getWidth = () =>{
+    if(window.innerWidth > 769){
+      return 400
+    }
+    else{
+      return 300
+    }
+  }
+
 
   const fillLists = async () => {
     if (values) {
@@ -186,7 +195,19 @@ export const FactChart = () => {
 
   const handleChange = async(value?: any) => {
     if(values === undefined){
-      await refetch()
+      let i = 0;
+      while(i < 5 && values === undefined){
+        if(i < 3){
+          await refetch();
+        }
+        else{
+          await refetch().catch((error) => {
+            localStorage.removeItem('token');
+            window.location.reload();
+          })
+        }
+        i += 1
+      }
     }
     setSelected(value)
     await fillLists()
@@ -704,10 +725,10 @@ export const FactChart = () => {
       <div className="d-flex justify-content-center">
       <div className="d-flex justify-content-center row">
          <div className="col">
-         <div className="chart"><div className="text-center">Positive:</div><div><Pie options={setOptions()} data={pieChartData} defaultValue={undefined} width={400} height={400}/></div></div>
+         <div className="chart"><div className="text-center">Positive:</div><div><Pie options={setOptions()} data={pieChartData} defaultValue={undefined} width={getWidth()} height={400}/></div></div>
          </div>
          <div className="col">
-         <div className="chart"><div className="text-center">Negative:</div><div><Pie options={setOptions()} data={pieChart2Data} defaultValue={undefined} width={400} height={400}/></div></div>
+         <div className="chart"><div className="text-center">Negative:</div><div><Pie options={setOptions()} data={pieChart2Data} defaultValue={undefined} width={getWidth()} height={400}/></div></div>
          </div>
       </div>
       </div>

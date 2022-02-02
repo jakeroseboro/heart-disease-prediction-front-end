@@ -13,7 +13,7 @@ export const Nav = () => {
     return(
     <div style={{width: '100%'}}>
     <Menu mode="horizontal" selectedKeys={[location.pathname]} onClick={clickHandler}> 
-    <Menu.Item key="/" style={{color:"#ceceeb;"}}>
+    <Menu.Item key="/">
         Home
     </Menu.Item>
     <Menu.Item key="/quiz">

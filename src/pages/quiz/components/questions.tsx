@@ -12,30 +12,28 @@ export const Questions = () =>{
     const [quizMode, setQuizMode] = useState(0);
 
     const fetchResults = async(values:any) =>{
-        try{
-            const token = localStorage.getItem('token')
-            const response = await axios.post("https://heart-disease-ml-api.herokuapp.com/prediction", values, {headers:{'Authorization': `Bearer ${token}`}}).catch((error) => {
-                console.error(error)
-            });
-            if(response != null){
-                if(response.status === 401 || response.status === 500){
-                    localStorage.removeItem('token')
-                    window.location.reload()
-                }
-            }
-            return response?.data;
-        }
-        catch(error){
-            console.error(error);
-            message.error("Something went wrong, please try again.")
-        }
+        const token = localStorage.getItem('token')
+        const response = await axios.post("https://heart-disease-ml-api.herokuapp.com/prediction", values, {headers:{'Authorization': `Bearer ${token}`}}).catch((error) => {
+            console.error(error)
+        });
+        return response?.data;
     }
 
     const handleRequest = async(values: any) =>{
         setLoading(true);
         let response = await fetchResults(values)
-        while(response === undefined){
-            response = await fetchResults(values)
+        if(response === undefined){
+            let i = 0;
+            while(response === undefined && i <5){
+                if(i < 3){
+                    response = await fetchResults(values)
+                }
+                else{
+                    localStorage.removeItem('token');
+                    window.location.reload();
+                }
+                i += 1
+            }
         }
         if(response !== undefined){
             setProbability(response * 100)
@@ -156,8 +154,8 @@ export const Questions = () =>{
                 </div>
                 </> :
                 <>
-                    <div className='justify-content-center text-center quiz'>
-                        {loading ? <Spin/> : <p className='text-white'>You have a {probability}% chance of heart disease based on the information provided. If you find this result worrisome, please contact your physician as this result does not replace medical advice</p>}
+                    <div className='d-flex justify-content-center text-center quiz'>
+                        {loading ? <Spin/> : <p className='text-white results'>You have a {probability}% chance of heart disease based on the information provided. If you find this result worrisome, please contact your physician as this result does not replace medical advice.</p>}
                     </div>
                 </>
         }

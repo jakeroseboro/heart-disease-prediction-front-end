@@ -18,4 +18,6 @@ getChartData().then(r => {
         })
     }
     return r.data
+}).catch((error)=> {
+    console.error(error);
 }));
