@@ -13,9 +13,9 @@ import {
 import { Bar, Pie, Line } from "react-chartjs-2";
 import { Select } from "antd";
 import { useEffect, useState } from "react";
-import { useChartData } from "../factsData";
 import { Container } from "react-bootstrap";
 import './chart.scss'
+import axios from "axios";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -33,7 +33,7 @@ ChartJS.defaults.color = "black"
 const { Option } = Select;
 
 export const FactChart = () => {
-  const { data: values, refetch } = useChartData();
+  //const { data: values, refetch } = useChartData();
   const [selected, setSelected] = useState('');
   const [chartData, setChartData] = useState(
     {
@@ -127,9 +127,31 @@ export const FactChart = () => {
     }
   }
 
+  const fetchDataForLists = async() =>{
+    const token = localStorage.getItem('token')
+    const response = await axios.get("https://heart-disease-ml-api.herokuapp.com/data?format=list",{headers:{'Authorization': `Bearer ${token}`}}).catch((error) => {
+            console.error(error)
+      });
+    return response?.data;
+  }
+
 
   const fillLists = async () => {
-    if (values) {
+    let values = await fetchDataForLists()
+        if(values === undefined){
+            let i = 0;
+            while(values === undefined && i <8){
+                if(i < 7){
+                  values = await fetchDataForLists()
+                }
+                else{
+                    localStorage.removeItem('token');
+                    window.location.reload();
+                }
+                i += 1
+            }
+        }
+    if (values !== undefined) {
       for (let i of values.age[0]) {
         agePositive.push(i);
       }
@@ -194,21 +216,6 @@ export const FactChart = () => {
   }
 
   const handleChange = async(value?: any) => {
-    if(values === undefined){
-      let i = 0;
-      while(i < 5 && values === undefined){
-        if(i < 3){
-          await refetch();
-        }
-        else{
-          await refetch().catch((error) => {
-            localStorage.removeItem('token');
-            window.location.reload();
-          })
-        }
-        i += 1
-      }
-    }
     setSelected(value)
     await fillLists()
     setChart(value)
